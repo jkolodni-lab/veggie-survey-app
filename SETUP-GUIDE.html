@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מדריך התקנה - מערכת סקר ירקות</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+            background: #f5f5f5;
+            direction: rtl;
+            padding: 20px;
+            line-height: 1.8;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #2e7d32, #43a047);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 { font-size: 1.6em; }
+        .content { padding: 30px; }
+        h2 {
+            color: #2e7d32;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #a5d6a7;
+        }
+        h3 { color: #43a047; margin: 15px 0 10px; }
+        .step {
+            background: #f9fbe7;
+            border-right: 4px solid #43a047;
+            padding: 15px 20px;
+            margin: 10px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .step-num {
+            background: #2e7d32;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-left: 8px;
+        }
+        code {
+            background: #e8f5e9;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Consolas', monospace;
+            direction: ltr;
+            display: inline-block;
+        }
+        .warning {
+            background: #fff3e0;
+            border-right: 4px solid #ff9800;
+            padding: 12px 16px;
+            border-radius: 0 8px 8px 0;
+            margin: 10px 0;
+            color: #e65100;
+        }
+        .success {
+            background: #e8f5e9;
+            border-right: 4px solid #4caf50;
+            padding: 12px 16px;
+            border-radius: 0 8px 8px 0;
+            margin: 10px 0;
+            color: #2e7d32;
+        }
+        .file-list {
+            background: #f5f5f5;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        .file-list li {
+            margin: 5px 0;
+            list-style: none;
+        }
+        .file-list li::before { content: "📄 "; }
+        a { color: #1565c0; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>&#128214; מדריך התקנה - מערכת סקר ירקות</h1>
+        <p>3 שלבים פשוטים להפעלת המערכת</p>
+    </div>
+
+    <div class="content">
+
+        <h2>&#128193; הקבצים שקיבלת</h2>
+        <ul class="file-list">
+            <li><strong>survey.html</strong> - הסקר שאנשי הקשר ימלאו</li>
+            <li><strong>dashboard.html</strong> - דשבורד ניתוח תוצאות</li>
+            <li><strong>google-apps-script.js</strong> - קוד לשרת Google (מקבל תשובות)</li>
+            <li><strong>SETUP-GUIDE.html</strong> - המדריך הזה</li>
+        </ul>
+
+        <!-- STEP 1 -->
+        <h2>שלב 1: הקמת שרת Google Sheets &#128202;</h2>
+        <p>זה מה שיאסוף את כל התשובות לטבלה אחת בגוגל שיטס.</p>
+
+        <div class="step">
+            <span class="step-num">1</span>
+            היכנסו ל-Google Drive שלכם (jkolodni@gmail.com)
+        </div>
+
+        <div class="step">
+            <span class="step-num">2</span>
+            צרו <strong>Google Sheet חדש</strong> ותנו לו שם: <code>סקר ירקות - תשובות</code>
+        </div>
+
+        <div class="step">
+            <span class="step-num">3</span>
+            מתוך הגיליון, לחצו בתפריט על <strong>Extensions > Apps Script</strong>
+        </div>
+
+        <div class="step">
+            <span class="step-num">4</span>
+            מחקו את כל הקוד שמופיע בעורך. פתחו את הקובץ <code>google-apps-script.js</code> בטקסט אדיטור (Notepad), העתיקו הכל, והדביקו בעורך של Apps Script.
+        </div>
+
+        <div class="step">
+            <span class="step-num">5</span>
+            לחצו על <strong>&#128190; Save</strong> (או Ctrl+S)
+        </div>
+
+        <div class="step">
+            <span class="step-num">6</span>
+            לחצו על <strong>Deploy > New deployment</strong>
+        </div>
+
+        <div class="step">
+            <span class="step-num">7</span>
+            ליד "Select type" לחצו על גלגל השיניים &#9881; ובחרו <strong>Web app</strong>
+        </div>
+
+        <div class="step">
+            <span class="step-num">8</span>
+            הגדרות:
+            <ul style="margin-right: 40px; margin-top: 5px;">
+                <li><strong>Description:</strong> Survey Backend</li>
+                <li><strong>Execute as:</strong> Me (jkolodni@gmail.com)</li>
+                <li><strong>Who has access:</strong> Anyone</li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <span class="step-num">9</span>
+            לחצו <strong>Deploy</strong>. אם מבקש הרשאה - אשרו (Authorize access > Advanced > Go to Survey Backend > Allow)
+        </div>
+
+        <div class="step">
+            <span class="step-num">10</span>
+            <strong>&#128279; העתיקו את ה-URL שמופיע!</strong> זה הכתובת של השרת שלכם. היא נראית כך:<br>
+            <code>https://script.google.com/macros/s/XXXXXXX/exec</code>
+        </div>
+
+        <div class="success">
+            <strong>&#9989; מעולה!</strong> השרת מוכן. כל תשובה תישמר אוטומטית בגוגל שיטס.
+        </div>
+
+        <!-- STEP 2 -->
+        <h2>שלב 2: חיבור הסקר לשרת &#128279;</h2>
+
+        <div class="step">
+            <span class="step-num">1</span>
+            פתחו את הקובץ <code>survey.html</code> ב-Notepad (קליק ימני > Open with > Notepad)
+        </div>
+
+        <div class="step">
+            <span class="step-num">2</span>
+            חפשו (Ctrl+H) את הטקסט:<br>
+            <code>YOUR_GOOGLE_SCRIPT_URL_HERE</code><br>
+            והחליפו אותו ב-URL שהעתקתם בשלב הקודם
+        </div>
+
+        <div class="step">
+            <span class="step-num">3</span>
+            שמרו את הקובץ (Ctrl+S)
+        </div>
+
+        <div class="warning">
+            <strong>&#9888; חשוב:</strong> הסקר עובד גם בלי שרת (שומר מקומית בדפדפן), אבל עם שרת כל התשובות נאספות במקום אחד.
+        </div>
+
+        <!-- STEP 3 -->
+        <h2>שלב 3: העלאה לאינטרנט ושיתוף בוואטסאפ &#128241;</h2>
+        <p>כדי שאנשים יוכלו למלא את הסקר, צריך להעלות אותו לאינטרנט. הנה הדרך הקלה ביותר:</p>
+
+        <h3>אפשרות א': Netlify Drop (הכי קל! בלי רישום)</h3>
+        <div class="step">
+            <span class="step-num">1</span>
+            גלשו ל- <strong>app.netlify.com/drop</strong>
+        </div>
+        <div class="step">
+            <span class="step-num">2</span>
+            גררו את תיקיית <code>survey-app</code> לתוך הדפדפן
+        </div>
+        <div class="step">
+            <span class="step-num">3</span>
+            תקבלו כתובת כמו: <code>https://xxxxx.netlify.app</code>
+        </div>
+        <div class="step">
+            <span class="step-num">4</span>
+            הכתובת של הסקר: <code>https://xxxxx.netlify.app/survey.html</code>
+        </div>
+
+        <h3>אפשרות ב': GitHub Pages (חינם, קבוע)</h3>
+        <div class="step">
+            <span class="step-num">1</span>
+            צרו חשבון ב-GitHub (אם אין) והעלו את הקבצים ל-repository חדש
+        </div>
+        <div class="step">
+            <span class="step-num">2</span>
+            Settings > Pages > Source: Deploy from branch > main > Save
+        </div>
+        <div class="step">
+            <span class="step-num">3</span>
+            תקבלו כתובת: <code>https://jkolodni.github.io/repo-name/survey.html</code>
+        </div>
+
+        <h3>שליחה בוואטסאפ</h3>
+        <div class="step">
+            <span class="step-num">&#128172;</span>
+            בסקר יש כפתור <strong>"שתפו את הסקר בוואטסאפ"</strong> שנותן הודעה מוכנה עם קישור.<br>
+            לפני השימוש, עדכנו את <code>SURVEY_URL</code> בקובץ survey.html עם הכתובת שקיבלתם.
+        </div>
+
+        <div class="success">
+            <strong>&#127881; סיימתם!</strong> עכשיו שלחו את הקישור לאנשי הקשר שלכם בוואטסאפ, והתשובות ייאספו אוטומטית בגוגל שיטס.
+        </div>
+
+        <!-- Dashboard -->
+        <h2>שימוש בדשבורד &#128202;</h2>
+        <div class="step">
+            <span class="step-num">1</span>
+            פתחו את <code>dashboard.html</code> בדפדפן
+        </div>
+        <div class="step">
+            <span class="step-num">2</span>
+            הזינו את כתובת ה-Google Apps Script (אותה כתובת משלב 1)
+        </div>
+        <div class="step">
+            <span class="step-num">3</span>
+            הדשבורד יטען את כל התשובות ויציג:
+            <ul style="margin-right: 40px; margin-top: 5px;">
+                <li>15 המוצרים הפופולריים ביותר</li>
+                <li>התפלגות לפי קטגוריה</li>
+                <li>הוצאה שבועית</li>
+                <li>העדפה להידרופוני</li>
+                <li>עניין במנוי שבועי</li>
+                <li>גודל משפחה ומקום קנייה</li>
+                <li>טבלת דירוג מוצרים מלאה</li>
+                <li>רשימת כל הנשאלים</li>
+            </ul>
+        </div>
+        <div class="step">
+            <span class="step-num">4</span>
+            אפשר לסנן לפי קטגוריה ואזור, ולייצא הכל ל-CSV לאקסל
+        </div>
+
+        <h2>&#128161; טיפים</h2>
+        <ul style="margin-right: 20px;">
+            <li>שלחו תזכורת אחרי 3 ימים למי שלא מילא</li>
+            <li>הדשבורד מתעדכן בזמן אמת - לחצו "רענן" לראות תשובות חדשות</li>
+            <li>כל התשובות נשמרות גם בגוגל שיטס - אפשר לעבוד עליהן ישירות שם</li>
+            <li>הסקר מותאם למובייל - רוב האנשים ימלאו מהטלפון</li>
+        </ul>
+
+    </div>
+</div>
+
+</body>
+</html>

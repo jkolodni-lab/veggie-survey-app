@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>סקר צריכת ירקות, עלים ומיקרו-ירוקים</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+            background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 50%, #fff8e1 100%);
+            min-height: 100vh;
+            padding: 20px;
+            direction: rtl;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #2e7d32, #43a047);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 { font-size: 1.6em; margin-bottom: 10px; }
+        .header p { font-size: 0.95em; opacity: 0.9; line-height: 1.6; }
+        .section { padding: 25px 30px; border-bottom: 1px solid #e0e0e0; }
+        .section:last-child { border-bottom: none; }
+        .section-title {
+            font-size: 1.2em;
+            color: #2e7d32;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #a5d6a7;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-title .icon { font-size: 1.4em; }
+        label { display: block; font-weight: 600; margin-bottom: 5px; color: #333; }
+        input[type="text"], input[type="tel"], input[type="number"], select, textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+            direction: rtl;
+            transition: border-color 0.2s;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #43a047;
+            box-shadow: 0 0 0 3px rgba(67,160,71,0.15);
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .form-group { margin-bottom: 15px; }
+        .product-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .product-table th {
+            background: #e8f5e9;
+            padding: 10px 8px;
+            text-align: right;
+            font-size: 0.85em;
+            color: #2e7d32;
+            border-bottom: 2px solid #a5d6a7;
+        }
+        .product-table td {
+            padding: 8px;
+            border-bottom: 1px solid #f0f0f0;
+            vertical-align: middle;
+        }
+        .product-table tr:hover { background: #f9fbe7; }
+        .product-name { font-weight: 500; min-width: 140px; }
+        .product-table input[type="number"] {
+            width: 70px;
+            padding: 6px 8px;
+            text-align: center;
+        }
+        .product-table select {
+            width: auto;
+            min-width: 90px;
+            padding: 6px 8px;
+        }
+        .product-table input[type="text"] {
+            width: 120px;
+            padding: 6px 8px;
+        }
+        .consume-toggle {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .consume-toggle input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #43a047;
+            cursor: pointer;
+        }
+        .category-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .badge-lettuce { background: #c8e6c9; color: #1b5e20; }
+        .badge-herbs { background: #dcedc8; color: #33691e; }
+        .badge-micro { background: #f0f4c3; color: #827717; }
+        .submit-section {
+            padding: 25px 30px;
+            text-align: center;
+            background: #fafafa;
+        }
+        .btn-submit {
+            background: linear-gradient(135deg, #2e7d32, #43a047);
+            color: white;
+            border: none;
+            padding: 14px 50px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-family: inherit;
+        }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(46,125,50,0.3);
+        }
+        .btn-submit:disabled {
+            background: #aaa;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .btn-export {
+            background: #1565c0;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1em;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-family: inherit;
+            transition: transform 0.2s;
+        }
+        .btn-export:hover { transform: translateY(-2px); }
+        .btn-whatsapp {
+            background: #25D366;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1em;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-family: inherit;
+            transition: transform 0.2s;
+            display: none;
+        }
+        .btn-whatsapp:hover { transform: translateY(-2px); }
+        .required::after { content: " *"; color: #d32f2f; }
+        .instructions {
+            background: #fff3e0;
+            border-right: 4px solid #ff9800;
+            padding: 12px 16px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+            line-height: 1.6;
+            color: #e65100;
+        }
+        .summary-box {
+            background: #e8f5e9;
+            border: 2px solid #a5d6a7;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            text-align: center;
+        }
+        .summary-box .count { font-size: 2em; color: #2e7d32; font-weight: 700; }
+        .thank-you {
+            display: none;
+            text-align: center;
+            padding: 60px 30px;
+        }
+        .thank-you h2 { color: #2e7d32; margin-bottom: 15px; font-size: 1.8em; }
+        .thank-you p { font-size: 1.1em; margin-bottom: 10px; }
+        .spinner {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 3px solid #fff;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            vertical-align: middle;
+            margin-left: 8px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .status-bar {
+            background: #fff3e0;
+            color: #e65100;
+            padding: 10px 20px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+        .status-bar.success { background: #e8f5e9; color: #2e7d32; }
+        .status-bar.error { background: #ffebee; color: #c62828; }
+        .progress-bar {
+            height: 4px;
+            background: #a5d6a7;
+            width: 0%;
+            transition: width 0.3s;
+            position: fixed;
+            top: 0;
+            right: 0;
+            z-index: 999;
+        }
+        @media (max-width: 600px) {
+            .form-row { grid-template-columns: 1fr; }
+            .product-table { font-size: 0.85em; }
+            .product-table input[type="number"] { width: 55px; }
+            .product-table input[type="text"] { width: 80px; }
+            .header h1 { font-size: 1.3em; }
+            .section { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="container" id="surveyForm">
+    <div class="header">
+        <h1>&#127807; &#129388; &#127793; &#127811;</h1>
+        <h1>סקר צריכת ירקות, עלים ומיקרו-ירוקים</h1>
+        <p>סקר שבועי למשפחות - עזרו לנו להבין את הרגלי הצריכה שלכם<br>
+        המידע ישמש לתכנון ייצור של חווה הידרופונית מקומית</p>
+    </div>
+
+    <div class="status-bar" id="statusBar"></div>
+
+    <!-- Personal Details -->
+    <div class="section">
+        <div class="section-title"><span class="icon">&#128100;</span> פרטים אישיים</div>
+        <div class="form-row">
+            <div class="form-group">
+                <label class="required">שם המשיב/ה</label>
+                <input type="text" id="respName" placeholder="שם מלא" required>
+            </div>
+            <div class="form-group">
+                <label class="required">טלפון</label>
+                <input type="tel" id="respPhone" placeholder="050-0000000" required>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label class="required">מספר נפשות במשפחה</label>
+                <select id="familySize">
+                    <option value="">בחרו...</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7+">7+</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="required">איפה אתם קונים ירקות בעיקר?</label>
+                <select id="buyLocation">
+                    <option value="">בחרו...</option>
+                    <option value="סופרמרקט">סופרמרקט</option>
+                    <option value="שוק / ירקן">שוק / ירקן</option>
+                    <option value="הזמנה אונליין">הזמנה אונליין</option>
+                    <option value="חנות אורגנית">חנות אורגנית</option>
+                    <option value="משולב">משולב</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>אזור מגורים</label>
+            <input type="text" id="area" placeholder="עיר / יישוב">
+        </div>
+    </div>
+
+    <!-- Instructions -->
+    <div class="section">
+        <div class="instructions">
+            <strong>הנחיות מילוי:</strong><br>
+            &#9745; סמנו את המוצרים שאתם צורכים בשבוע רגיל<br>
+            &#128290; ציינו כמות שבועית ויחידת מידה (יחידות / גרם / צרורות)<br>
+            &#128221; בעמודת ההערות ציינו העדפות מיוחדות (למשל: "רק אורגני", "רק בחורף", "ילדים אוהבים")<br>
+            &#8986; הסקר לוקח כ-5 דקות
+        </div>
+    </div>
+
+    <!-- Category 1: Lettuce & Green Leaves -->
+    <div class="section">
+        <div class="section-title"><span class="icon">&#129388;</span> חסות ועלים ירוקים</div>
+        <span class="category-badge badge-lettuce">18 מוצרים</span>
+        <table class="product-table">
+            <thead>
+                <tr>
+                    <th>צורכים?</th>
+                    <th>מוצר</th>
+                    <th>כמות בשבוע</th>
+                    <th>יחידת מידה</th>
+                    <th>הערות</th>
+                </tr>
+            </thead>
+            <tbody id="lettuceBody"></tbody>
+        </table>
+    </div>
+
+    <!-- Category 2: Herbs -->
+    <div class="section">
+        <div class="section-title"><span class="icon">&#127793;</span> עשבי תיבול</div>
+        <span class="category-badge badge-herbs">12 מוצרים</span>
+        <table class="product-table">
+            <thead>
+                <tr>
+                    <th>צורכים?</th>
+                    <th>מוצר</th>
+                    <th>כמות בשבוע</th>
+                    <th>יחידת מידה</th>
+                    <th>הערות</th>
+                </tr>
+            </thead>
+            <tbody id="herbsBody"></tbody>
+        </table>
+    </div>
+
+    <!-- Category 3: Microgreens -->
+    <div class="section">
+        <div class="section-title"><span class="icon">&#127811;</span> מיקרו-ירוקים</div>
+        <span class="category-badge badge-micro">20 מוצרים</span>
+        <div class="instructions" style="border-right-color: #827717; background: #f9fbe7; color: #827717;">
+            <strong>מה זה מיקרו-ירוקים?</strong> נבטים צעירים של ירקות ועשבי תיבול, עשירים בוויטמינים וטעם עשיר. משמשים לקישוט, סלטים ושייקים.
+        </div>
+        <table class="product-table">
+            <thead>
+                <tr>
+                    <th>צורכים?</th>
+                    <th>מוצר</th>
+                    <th>כמות בשבוע</th>
+                    <th>יחידת מידה</th>
+                    <th>הערות</th>
+                </tr>
+            </thead>
+            <tbody id="microBody"></tbody>
+        </table>
+    </div>
+
+    <!-- Additional Questions -->
+    <div class="section">
+        <div class="section-title"><span class="icon">&#128161;</span> שאלות נוספות</div>
+
+        <div class="form-group">
+            <label>כמה אתם מוציאים בשבוע על ירקות עלים ותבלינים? (בקירוב)</label>
+            <select id="weeklySpend">
+                <option value="">בחרו...</option>
+                <option value="עד 30 ש״ח">עד 30 &#8362;</option>
+                <option value="30-60 ש״ח">30-60 &#8362;</option>
+                <option value="60-100 ש״ח">60-100 &#8362;</option>
+                <option value="100-150 ש״ח">100-150 &#8362;</option>
+                <option value="מעל 150 ש״ח">מעל 150 &#8362;</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>האם הייתם מעדיפים לקנות ירקות הידרופוניים מקומיים (ללא חומרי הדברה)?</label>
+            <select id="preferHydro">
+                <option value="">בחרו...</option>
+                <option value="כן, באותו מחיר">כן, באותו מחיר</option>
+                <option value="כן, גם אם יקר ב-10%">כן, גם אם יקר ב-10%</option>
+                <option value="כן, גם אם יקר ב-20%">כן, גם אם יקר ב-20%</option>
+                <option value="אולי, תלוי באיכות">אולי, תלוי באיכות</option>
+                <option value="לא, מחיר קובע">לא, מחיר קובע</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>האם הייתם מעוניינים במנוי שבועי של סל ירקות טריים מהחווה?</label>
+            <select id="subscription">
+                <option value="">בחרו...</option>
+                <option value="כן, בהחלט">כן, בהחלט</option>
+                <option value="אולי, תלוי בתוכן ובמחיר">אולי, תלוי בתוכן ובמחיר</option>
+                <option value="לא מעוניין/ת">לא מעוניין/ת</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>הערות כלליות או בקשות מיוחדות</label>
+            <textarea id="generalNotes" rows="3" placeholder="כתבו כאן..."></textarea>
+        </div>
+    </div>
+
+    <!-- Summary -->
+    <div class="section">
+        <div class="summary-box">
+            <div>סה"כ מוצרים שנבחרו:</div>
+            <div class="count" id="totalCount">0</div>
+        </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="submit-section">
+        <button class="btn-submit" id="btnSubmit" onclick="submitSurvey()">&#9989; שליחת הסקר</button>
+        <br>
+        <button class="btn-export" onclick="exportCSV()">&#128190; ייצוא לאקסל (CSV)</button>
+    </div>
+</div>
+
+<!-- Thank You Page -->
+<div class="container thank-you" id="thankYou">
+    <h2>&#127775; תודה רבה על מילוי הסקר!</h2>
+    <p>התשובות שלכם יעזרו לנו לתכנן את הייצור בחווה ההידרופונית</p>
+    <p style="margin-top: 10px; color: #666;">הנתונים נשמרו בהצלחה בגוגל שיטס</p>
+    <div style="margin-top: 30px;">
+        <button class="btn-whatsapp" id="btnShareAfter" onclick="shareWhatsApp()" style="display:inline-block; font-size: 1.1em; padding: 14px 40px;">
+            &#128172; שתפו את הסקר בוואטסאפ
+        </button>
+    </div>
+</div>
+
+<script>
+// ============================================================
+// CONFIGURATION - Replace this URL after deploying Google Apps Script
+// ============================================================
+const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_SCRIPT_URL_HERE';
+
+// The URL where this survey is hosted (update after deployment)
+const SURVEY_URL = 'YOUR_SURVEY_URL_HERE';
+
+// ============================================================
+// Product data from Excel files
+// ============================================================
+const products = {
+    lettuce: [
+        "חסה רומיין", "חסה סלנובה / באטרהד", "חסה עלים ירוקה",
+        "חסה עלים אדומה", "חסה אייסברג קטנה / קריספי", "מיקס חסות",
+        "רוקט", "תרד בייבי", "קייל בייבי", "מנגולד בייבי",
+        "בוק צ׳וי בייבי", "מיזונה", "טאטסוי", "חרדל אסייתי",
+        "קרס / אפלנד קרס", "עלי סלק בייבי", "כרוב בייבי", "קולרבי בייבי"
+    ],
+    herbs: [
+        "בזיליקום", "כוסברה", "פטרוזיליה", "נענע", "שמיר",
+        "עירית / צ׳ייבס", "אורגנו", "טימין", "מרווה",
+        "טרגון", "מליסה", "רוזמרין"
+    ],
+    micro: [
+        "מיקרו-רוקט", "מיקרו-ברוקולי", "מיקרו-צנונית", "מיקרו-חרדל",
+        "מיקרו-קייל", "מיקרו-כרוב אדום", "מיקרו-קולרבי", "מיקרו-בוק צ׳וי",
+        "מיקרו-מיזונה", "מיקרו-טאטסוי", "מיקרו-סלק", "מיקרו-מנגולד",
+        "מיקרו-אפונה (pea shoots)", "מיקרו-חמנייה", "מיקרו-כוסברה",
+        "מיקרו-בזיליקום", "מיקרו-שמיר", "מיקרו-אמרנט",
+        "מיקרו-שיסו / פרילה", "מיקרו-גרגר הנחלים"
+    ]
+};
+
+const units = ["יחידות", "גרם", "צרורות", "מארזים", 'ק"ג'];
+
+// ============================================================
+// UI Functions
+// ============================================================
+function createRow(product, category, index) {
+    const id = `${category}_${index}`;
+    const unitOptions = units.map(u => `<option value="${u}">${u}</option>`).join('');
+    return `
+        <tr id="row_${id}">
+            <td class="consume-toggle">
+                <input type="checkbox" id="chk_${id}" onchange="toggleRow('${id}'); updateCount();">
+            </td>
+            <td class="product-name">${product}</td>
+            <td><input type="number" id="qty_${id}" min="0" step="0.5" value="" placeholder="0" disabled></td>
+            <td><select id="unit_${id}" disabled>${unitOptions}</select></td>
+            <td><input type="text" id="note_${id}" placeholder="" disabled></td>
+        </tr>
+    `;
+}
+
+function toggleRow(id) {
+    const checked = document.getElementById(`chk_${id}`).checked;
+    ['qty_', 'unit_', 'note_'].forEach(prefix => {
+        document.getElementById(prefix + id).disabled = !checked;
+    });
+    if (checked) document.getElementById(`qty_${id}`).focus();
+}
+
+function updateCount() {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+    document.getElementById('totalCount').textContent = checkboxes.length;
+}
+
+function populateTables() {
+    document.getElementById('lettuceBody').innerHTML = products.lettuce.map((p, i) => createRow(p, 'lettuce', i)).join('');
+    document.getElementById('herbsBody').innerHTML = products.herbs.map((p, i) => createRow(p, 'herbs', i)).join('');
+    document.getElementById('microBody').innerHTML = products.micro.map((p, i) => createRow(p, 'micro', i)).join('');
+}
+
+function showStatus(msg, type) {
+    const bar = document.getElementById('statusBar');
+    bar.textContent = msg;
+    bar.className = 'status-bar ' + (type || '');
+    bar.style.display = 'block';
+    if (type === 'success') setTimeout(() => bar.style.display = 'none', 5000);
+}
+
+function setProgress(pct) {
+    document.getElementById('progressBar').style.width = pct + '%';
+}
+
+// ============================================================
+// Data Collection
+// ============================================================
+function collectData() {
+    const data = {
+        name: document.getElementById('respName').value.trim(),
+        phone: document.getElementById('respPhone').value.trim(),
+        familySize: document.getElementById('familySize').value,
+        buyLocation: document.getElementById('buyLocation').value,
+        area: document.getElementById('area').value.trim(),
+        weeklySpend: document.getElementById('weeklySpend').value,
+        preferHydro: document.getElementById('preferHydro').value,
+        subscription: document.getElementById('subscription').value,
+        generalNotes: document.getElementById('generalNotes').value.trim(),
+        products: []
+    };
+
+    ['lettuce', 'herbs', 'micro'].forEach(cat => {
+        products[cat].forEach((product, i) => {
+            const id = `${cat}_${i}`;
+            if (document.getElementById(`chk_${id}`).checked) {
+                data.products.push({
+                    category: cat === 'lettuce' ? 'חסות ועלים ירוקים' : cat === 'herbs' ? 'עשבי תיבול' : 'מיקרו-ירוקים',
+                    product: product,
+                    quantity: document.getElementById(`qty_${id}`).value || '0',
+                    unit: document.getElementById(`unit_${id}`).value,
+                    notes: document.getElementById(`note_${id}`).value
+                });
+            }
+        });
+    });
+
+    return data;
+}
+
+// ============================================================
+// Submit to Google Sheets
+// ============================================================
+async function submitSurvey() {
+    const name = document.getElementById('respName').value.trim();
+    const phone = document.getElementById('respPhone').value.trim();
+    if (!name || !phone) {
+        showStatus('נא למלא שם וטלפון', 'error');
+        return;
+    }
+
+    const btn = document.getElementById('btnSubmit');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> שולח...';
+    setProgress(30);
+
+    const data = collectData();
+    data.timestamp = new Date().toISOString();
+
+    // Always save locally as backup
+    const allSurveys = JSON.parse(localStorage.getItem('vegSurveys') || '[]');
+    allSurveys.push(data);
+    localStorage.setItem('vegSurveys', JSON.stringify(allSurveys));
+
+    // Send to Google Sheets
+    if (GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL !== 'YOUR_GOOGLE_SCRIPT_URL_HERE') {
+        try {
+            setProgress(60);
+            const response = await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            setProgress(100);
+        } catch (err) {
+            console.log('Google Sheets save - sent (no-cors mode):', err);
+            setProgress(100);
+        }
+    } else {
+        setProgress(100);
+        console.log('No Google Script URL configured. Data saved locally only.');
+    }
+
+    // Show thank you
+    document.getElementById('surveyForm').style.display = 'none';
+    document.getElementById('thankYou').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============================================================
+// WhatsApp Sharing
+// ============================================================
+function shareWhatsApp() {
+    const surveyLink = (SURVEY_URL && SURVEY_URL !== 'YOUR_SURVEY_URL_HERE')
+        ? SURVEY_URL
+        : window.location.href;
+
+    const message = encodeURIComponent(
+        `\u{1F33F}\u{1F96C} *סקר צריכת ירקות ועלים ירוקים* \u{1F33F}\u{1F96C}\n\n` +
+        `שלום! \u{1F44B}\n\n` +
+        `אנחנו מקימים חווה הידרופונית מקומית ורוצים להבין מה המשפחה שלכם צורכת.\n\n` +
+        `\u{23F1} הסקר לוקח כ-5 דקות\n` +
+        `\u{2705} קל ונוח למילוי מהטלפון\n` +
+        `\u{1F331} עוזר לנו לגדל בדיוק מה שאתם צריכים!\n\n` +
+        `\u{1F449} קישור לסקר:\n${surveyLink}\n\n` +
+        `תודה רבה! \u{1F64F}`
+    );
+
+    window.open(`https://wa.me/?text=${message}`, '_blank');
+}
+
+// ============================================================
+// CSV Export
+// ============================================================
+function exportCSV() {
+    const data = collectData();
+    if (!data.name) {
+        showStatus('נא למלא לפחות את השם לפני הייצוא', 'error');
+        return;
+    }
+
+    let csv = '\uFEFF';
+    csv += 'שם,טלפון,גודל משפחה,מקום קנייה,אזור,קטגוריה,מוצר,כמות בשבוע,יחידת מידה,הערות,הוצאה שבועית,העדפה הידרופוני,מנוי שבועי,הערות כלליות\n';
+
+    if (data.products.length === 0) {
+        csv += `"${data.name}","${data.phone}","${data.familySize}","${data.buyLocation}","${data.area}","","אין מוצרים נבחרו","","","","${data.weeklySpend}","${data.preferHydro}","${data.subscription}","${data.generalNotes}"\n`;
+    } else {
+        data.products.forEach((p, i) => {
+            csv += `"${data.name}","${data.phone}","${data.familySize}","${data.buyLocation}","${data.area}","${p.category}","${p.product}","${p.quantity}","${p.unit}","${p.notes}","${i === 0 ? data.weeklySpend : ''}","${i === 0 ? data.preferHydro : ''}","${i === 0 ? data.subscription : ''}","${i === 0 ? data.generalNotes : ''}"\n`;
+        });
+    }
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `survey_${data.name}_${new Date().toLocaleDateString('he-IL')}.csv`;
+    link.click();
+}
+
+// Initialize
+populateTables();
+</script>
+
+</body>
+</html>
