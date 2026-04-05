@@ -590,19 +590,14 @@ async function submitSurvey() {
     allSurveys.push(data);
     localStorage.setItem('vegSurveys', JSON.stringify(allSurveys));
 
-    // Send to Google Sheets
+    // Send to Google Sheets via hidden iframe form (handles redirects reliably)
     if (GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL !== 'YOUR_GOOGLE_SCRIPT_URL_HERE') {
         try {
             setProgress(60);
-            const response = await fetch(GOOGLE_SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
+            await sendViaIframe(GOOGLE_SCRIPT_URL, data);
             setProgress(100);
         } catch (err) {
-            console.log('Google Sheets save - sent (no-cors mode):', err);
+            console.log('Google Sheets submission error:', err);
             setProgress(100);
         }
     } else {
@@ -614,6 +609,47 @@ async function submitSurvey() {
     document.getElementById('surveyForm').style.display = 'none';
     document.getElementById('thankYou').style.display = 'block';
     window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============================================================
+// Send data via hidden iframe (reliable for Google Apps Script)
+// ============================================================
+function sendViaIframe(url, data) {
+    return new Promise((resolve) => {
+        // Create hidden iframe
+        const iframe = document.createElement('iframe');
+        iframe.name = 'survey_submit_frame';
+        iframe.style.display = 'none';
+        document.body.appendChild(iframe);
+
+        // Create form
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = url;
+        form.target = 'survey_submit_frame';
+
+        // Add data as hidden field
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'payload';
+        input.value = JSON.stringify(data);
+        form.appendChild(input);
+
+        document.body.appendChild(form);
+
+        // Resolve after submission + timeout
+        iframe.onload = () => {
+            setTimeout(() => {
+                document.body.removeChild(form);
+                document.body.removeChild(iframe);
+                resolve();
+            }, 1000);
+        };
+
+        // Submit and resolve after timeout regardless
+        form.submit();
+        setTimeout(resolve, 5000);
+    });
 }
 
 // ============================================================
